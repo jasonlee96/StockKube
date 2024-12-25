@@ -1,4 +1,5 @@
-﻿using StockKube.Core.Models;
+﻿using StockKube.Core.Enums;
+using StockKube.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace StockKube.Core.ExternalSources.Rates
 {
     public interface IRateRetrieval
     {
-        public async Task<RateDTO> GetRateAsync(string symbol);
+        Task<RateDTO> GetRateAsync(SymbolDTO symbol);
     }
 }

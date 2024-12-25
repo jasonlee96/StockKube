@@ -9,7 +9,7 @@ namespace StockKube.Core.ExternalSources.Rates.Bursa
 {
     public class BursaRateRetrieval : IRateRetrieval
     {
-        public Task<RateDTO> GetRateAsync(string symbol)
+        public Task<RateDTO> GetRateAsync(SymbolDTO symbol)
         {
             throw new NotImplementedException();
         }
