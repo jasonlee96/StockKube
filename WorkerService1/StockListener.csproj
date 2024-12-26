@@ -13,5 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAL.Mongo\DAL.Mongo.csproj" />
+    <ProjectReference Include="..\StockKube.Core\StockKube.Core.csproj" />
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ namespace StockKube.Core.Cache
 {
     public interface ICacheAppSettingService
     {
-        public Task PreloadOrReloadAllSetting();
+        public Task PreloadOrReloadAllSettingAsync();
         public Task<T> GetSettingAsync<T>(string key);
     }
 }

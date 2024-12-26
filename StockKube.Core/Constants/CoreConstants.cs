@@ -8,6 +8,11 @@ namespace StockKube.Core.Constants
 {
     public static class CoreConstants
     {
-        public const string CORE_SETTING_APIKEY = "";
+        #region App Setting Keys
+        public const string KEY_FORMAT = "APPSETTING:{0}";
+        public const string KEY_FORMAT_ITEMS = "APPSETTING:{0}:{1}";
+
+        public const string EXTERNAL_SOURCE = "EXTSOURCE";
+        #endregion
     }
 }

@@ -1,26 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DAL.Mongo.Models;
+using DAL.Mongo.Repositories.Interfaces;
+using Microsoft.Extensions.Logging;
+using StockKube.Core.Constants;
+using StockKube.Core.Extensions;
+using StockKube.Core.Models;
 
 namespace StockKube.Core.Cache
 {
     public class CacheAppSettingService : ICacheAppSettingService
     {
-        public CacheAppSettingService() { 
+        private readonly ILogger _logger;
+        private readonly IExternalSourceRepository _externalSourceRepository;
+
+        private List<CacheKeyDTO> _keys;
+        public CacheAppSettingService(ILogger<CacheAppSettingService> logger, IExternalSourceRepository externalSourceRepo) 
+        { 
+            _logger = logger;
+            _externalSourceRepository = externalSourceRepo;
+            _keys = new List<CacheKeyDTO>();
         }
 
-        public Task<T> GetSettingAsync<T>(string key)
+        public async Task<T> GetSettingAsync<T>(string key)
         {
-            throw new NotImplementedException();
+            if(string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
+
+            var matchedKey = _keys.Where(x => x.Key.ToUpper() == key.ToUpper()).FirstOrDefault();
+
+            if (matchedKey != null)
+            {
+                return await Task.FromResult(matchedKey.Value.DeserializeToPoco<T>());
+            }
+            return default;
         }
 
-        public Task PreloadOrReloadAllSetting()
+        public async Task PreloadOrReloadAllSettingAsync()
         {
             // r&d a pipeline to  fetch all the keys
+            List<Task> tasks = new List<Task>();
+            tasks.Add(FetchExternalSourcesAsync());
 
-            throw new NotImplementedException();
+            await Task.WhenAll(tasks);
+        }
+
+        private async Task FetchExternalSourcesAsync()
+        {
+            try
+            {
+                var extSources = await _externalSourceRepository.GetAllExternalSourcesAsync();
+
+                _keys.Add(new CacheKeyDTO {
+                    DataType = Enums.DataTypeEnum.Object,
+                    Key = string.Format(CoreConstants.KEY_FORMAT, CoreConstants.EXTERNAL_SOURCE),
+                    Value = extSources.ToJson(),
+                    ClassName = typeof(List<ExternalSource>)?.FullName ?? ""
+                });
+            }
+            catch (Exception ex) 
+            {
+                _logger.Log(ex);
+            }
         }
     }
 }
