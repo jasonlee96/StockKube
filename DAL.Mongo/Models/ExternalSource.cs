@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Mongo.Models
 {
-    public class ExternalSource
+    public class ExternalSource : BaseModel
     {
         public ObjectId Id { get; set; }
         [BsonElement("exchangeType")]
@@ -17,5 +17,8 @@ namespace DAL.Mongo.Models
         public string APIUrl { get; set; }
         [BsonElement("apiKey")]
         public string APIKey { get; set; }
+
+        [BsonElement("intervalInMin")]
+        public int IntervalInMin { get; set; }
     }
 }

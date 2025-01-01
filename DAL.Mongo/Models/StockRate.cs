@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Mongo.Models
 {
-    public class StockRate
+    public class StockRate : BaseModel
     {
         public ObjectId Id { get; set; }
         [BsonElement("symbol")]

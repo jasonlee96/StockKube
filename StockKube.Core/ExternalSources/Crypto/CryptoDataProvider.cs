@@ -1,6 +1,6 @@
 ﻿using StockKube.Core.Models;
 
-namespace StockKube.Core.ExternalSources.Rates.Crypto
+namespace StockKube.Core.ExternalSources.Crypto
 {
     public class CryptoDataProvider : ISourceDataProvider
     {

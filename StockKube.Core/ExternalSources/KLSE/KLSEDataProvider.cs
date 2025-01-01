@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StockKube.Core.ExternalSources.Rates.KLSE
+namespace StockKube.Core.ExternalSources.KLSE
 {
     public class KLSEDataProvider : ISourceDataProvider
     {

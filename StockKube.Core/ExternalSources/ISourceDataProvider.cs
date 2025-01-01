@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StockKube.Core.ExternalSources.Rates
+namespace StockKube.Core.ExternalSources
 {
     public interface ISourceDataProvider
     {
