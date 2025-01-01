@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StockKube.Core.ExternalSources.Rates
 {
-    public interface IRateRetrieval
+    public interface ISourceDataProvider
     {
         Task<RateDTO> GetRateAsync(SymbolDTO symbol);
     }

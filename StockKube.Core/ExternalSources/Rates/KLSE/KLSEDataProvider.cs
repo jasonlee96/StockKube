@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StockKube.Core.ExternalSources.Rates.Bursa
+namespace StockKube.Core.ExternalSources.Rates.KLSE
 {
-    public class BursaRateRetrieval : IRateRetrieval
+    public class KLSEDataProvider : ISourceDataProvider
     {
         public Task<RateDTO> GetRateAsync(SymbolDTO symbol)
         {

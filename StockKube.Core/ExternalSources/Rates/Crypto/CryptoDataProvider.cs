@@ -2,7 +2,7 @@
 
 namespace StockKube.Core.ExternalSources.Rates.Crypto
 {
-    public class CryptoRateRetrieval : IRateRetrieval
+    public class CryptoDataProvider : ISourceDataProvider
     {
         public Task<RateDTO> GetRateAsync(SymbolDTO symbol)
         {

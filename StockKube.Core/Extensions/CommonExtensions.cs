@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using StockKube.Core.Models.IntraObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,5 +76,21 @@ namespace StockKube.Core.Extensions
             return JsonConvert.DeserializeObject(json, targetType)
                    ?? throw new InvalidOperationException($"Failed to deserialize JSON to type '{typeFullName}'.");
         }
+
+
+        #region Common API Client header binding
+
+        public static void BindHTTP(this HttpClient client, APIRequestBinder binder)
+        {
+            if (binder.IsNull()) return;
+
+            client.BaseAddress = new Uri(binder.Url);
+            foreach (var item in binder.Headers)
+            {
+                client.DefaultRequestHeaders.Add(item.Key, item.Value);
+            }
+            
+        }
+        #endregion
     }
 }
