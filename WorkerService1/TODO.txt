@@ -1,0 +1,4 @@
+﻿TODO:
+
+1. Prepare dynamic worker service (iterate thru all external source)
+	- move timer background service into here
