@@ -10,7 +10,7 @@ namespace StockKube.Core.Helpers
 {
     public static class StockKubeHelper
     {
-        public static APIRequestBinder FormApiHTTPBinding(ExternalSource source)
+        public static APIRequestBinder FormCommonApiHTTPBinding(ExternalSource source)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Authorization", source.APIKey);

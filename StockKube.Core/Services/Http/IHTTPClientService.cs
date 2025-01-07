@@ -9,7 +9,7 @@ namespace StockKube.Core.Services.Http
 {
     public interface IHTTPClientService
     {
-        Task<TResponse?> GetAsync<TResponse>(string url, Dictionary<string, string> queryParams = null, APIRequestBinder binder = null)
-        Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest body, APIRequestBinder binder = null)
+        Task<TResponse?> GetAsync<TResponse>(string url, Dictionary<string, string> queryParams = null, APIRequestBinder binder = null);
+        Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest body, APIRequestBinder binder = null);
     }
 }

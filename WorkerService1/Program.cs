@@ -3,7 +3,7 @@ using StockKube.Core.Extensions;
 using WorkerService1;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
+builder.Services.AddHostedService<RateActivator>();
 
 var connectionString = builder.Configuration.GetValue<string>("ConnectionStrings:MongoDB");
 builder.Services.InitDBServices(connectionString ?? "");

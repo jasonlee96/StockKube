@@ -18,6 +18,7 @@ namespace StockKube.Core.Cache
             _logger = logger;
             _externalSourceRepository = externalSourceRepo;
             _keys = new List<CacheKeyDTO>();
+            PreloadOrReloadAllSettingAsync().GetAwaiter().GetResult();
         }
 
         public async Task<T> GetSettingAsync<T>(string key)
