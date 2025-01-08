@@ -11,6 +11,6 @@ namespace StockKube.Core.Enums
         Object,
         Numeric,
         Decimal,
-        String
+        String,
     }
 }

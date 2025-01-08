@@ -10,5 +10,6 @@ namespace StockKube.Core.Cache
     {
         public Task PreloadOrReloadAllSettingAsync();
         public Task<T> GetSettingAsync<T>(string key);
+        public T GetSetting<T>(string key);
     }
 }

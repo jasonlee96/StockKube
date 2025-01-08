@@ -13,8 +13,14 @@ namespace DAL.Mongo.Extensions
     {
         public static void InitRepositories(this IServiceCollection service)
         {
-            service.AddTransient<IStockRateRepository, StockRateRepository>();
-            service.AddTransient<IExternalSourceRepository, ExternalSourceRepository>();
+            var allProviderTypes = System.Reflection.Assembly.GetExecutingAssembly()
+                .GetTypes().Where(t => t.Namespace != null && t.Namespace.Contains("Repository"));
+
+            foreach (var intfc in allProviderTypes.Where(t => t.IsInterface))
+            {
+                var impl = allProviderTypes.FirstOrDefault(c => c.IsClass && intfc.Name.Substring(1) == c.Name);
+                if (impl != null) service.AddTransient(intfc, impl);
+            }
         }
     }
 }

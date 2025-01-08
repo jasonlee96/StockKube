@@ -13,5 +13,6 @@ namespace DAL.Mongo.Constants
 
         public const string COL_STOCKRATE_NAME = "stock_rate";
         public const string COL_EXTERNALSOURCE_NAME = "external_sources";
+        public const string COL_WATCHLIST_NAME = "watchlist";
     }
 }

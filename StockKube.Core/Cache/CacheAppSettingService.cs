@@ -11,27 +11,34 @@ namespace StockKube.Core.Cache
     {
         private readonly ILogger _logger;
         private readonly IExternalSourceRepository _externalSourceRepository;
+        private readonly IWatchlistRepository _watchlistRepository;
 
         private List<CacheKeyDTO> _keys;
-        public CacheAppSettingService(ILogger<CacheAppSettingService> logger, IExternalSourceRepository externalSourceRepo) 
+        public CacheAppSettingService(ILogger<CacheAppSettingService> logger, IExternalSourceRepository externalSourceRepo, IWatchlistRepository watchlistRepository) 
         { 
             _logger = logger;
             _externalSourceRepository = externalSourceRepo;
             _keys = new List<CacheKeyDTO>();
+            _watchlistRepository = watchlistRepository;
             PreloadOrReloadAllSettingAsync().GetAwaiter().GetResult();
         }
 
-        public async Task<T> GetSettingAsync<T>(string key)
+        public T GetSetting<T>(string key)
         {
-            if(string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
+            if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
 
             var matchedKey = _keys.Where(x => x.Key.ToUpper() == key.ToUpper()).FirstOrDefault();
 
             if (matchedKey != null)
             {
-                return await Task.FromResult(matchedKey.Value.DeserializeToPoco<T>());
+                return matchedKey.Value.DeserializeToPoco<T>();
             }
             return default;
+        }
+
+        public async Task<T> GetSettingAsync<T>(string key)
+        {
+            return await Task.FromResult(GetSetting<T>(key));
         }
 
         public async Task PreloadOrReloadAllSettingAsync()
@@ -39,6 +46,7 @@ namespace StockKube.Core.Cache
             // r&d a pipeline to  fetch all the keys
             List<Task> tasks = new List<Task>();
             tasks.Add(FetchExternalSourcesAsync());
+            tasks.Add(GetWatchlistAsync());
 
             await Task.WhenAll(tasks);
         }
@@ -57,6 +65,28 @@ namespace StockKube.Core.Cache
                 });
             }
             catch (Exception ex) 
+            {
+                _logger.Log(ex);
+            }
+        }
+
+        private async Task GetWatchlistAsync()
+        {
+            try
+            {
+                var currentWatchlist = await _watchlistRepository.GetAllWatchlistAsync();
+
+                currentWatchlist.GroupBy(x => x.ExchangeType, (k, v) => new { Key = k, Items = v }).ToList().ForEach(x => {
+                    _keys.Add(new CacheKeyDTO
+                    {
+                        DataType = Enums.DataTypeEnum.Object,
+                        Key = string.Format(CoreConstants.KEY_FORMAT_ITEMS, CoreConstants.WATCHLIST, x.Key),
+                        Value = x.Items.ToJson(),
+                        ClassName = typeof(List<Watchlist>)?.FullName ?? ""
+                    });
+                });
+            }
+            catch (Exception ex)
             {
                 _logger.Log(ex);
             }
