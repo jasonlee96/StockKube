@@ -36,7 +36,7 @@ namespace WorkerService1
             foreach (var source in sources)
             {
                 var provider = _factory.GetProvider(source.ExchangeType.ToEnum<ExchangeTypeEnum>());
-                _backgroundServices.Add(new RateRetrieverBackgroundService(_logger, provider, source.IntervalInMin));
+                _backgroundServices.Add(new RateRetrieverBackgroundService(_logger, provider, source.IntervalInMin, _appSettingService));
             }
 
             if (_backgroundServices.Any())
