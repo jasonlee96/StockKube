@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DAL.Mongo.Migrations;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using StockKube.Core.Cache;
 using StockKube.Core.ExternalSources;
@@ -26,6 +28,13 @@ namespace StockKube.Core.Extensions
             var settings = MongoClientSettings.FromUrl(new MongoUrl(connString));
             settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
             service.AddSingleton<IMongoClient>(new MongoClient(settings));
+
+            var serviceProvider = service.BuildServiceProvider();
+
+            // Run database seeder
+            var mongoClient = serviceProvider.GetRequiredService<IMongoClient>();
+            var seeder = new DatabaseSeeder(mongoClient);
+            seeder.ApplyMigrations();
         }
     }
 }

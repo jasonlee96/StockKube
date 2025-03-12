@@ -2,6 +2,7 @@
 using DAL.Mongo.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using StockKube.Core.Constants;
+using StockKube.Core.Enums;
 using StockKube.Core.Extensions;
 using StockKube.Core.Models;
 
@@ -57,12 +58,24 @@ namespace StockKube.Core.Cache
             {
                 var extSources = await _externalSourceRepository.GetAllExternalSourcesAsync();
 
-                _keys.Add(new CacheKeyDTO {
+                _keys.Add(new CacheKeyDTO
+                {
                     DataType = Enums.DataTypeEnum.Object,
                     Key = string.Format(CoreConstants.KEY_FORMAT, CoreConstants.EXTERNAL_SOURCE),
                     Value = extSources.ToJson(),
                     ClassName = typeof(List<ExternalSource>)?.FullName ?? ""
                 });
+                // form item as well
+                foreach (var extSource in extSources)
+                {
+                    _keys.Add(new CacheKeyDTO
+                    {
+                        DataType = Enums.DataTypeEnum.Object,
+                        Key = string.Format(CoreConstants.KEY_FORMAT_ITEMS, CoreConstants.EXTERNAL_SOURCE, extSource.ExchangeType),
+                        Value = extSource.ToJson(),
+                        ClassName = typeof(ExternalSource)?.FullName ?? ""
+                    });
+                }
             }
             catch (Exception ex) 
             {
