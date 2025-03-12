@@ -5,6 +5,8 @@ using StockKube.Core.Constants;
 using StockKube.Core.Enums;
 using StockKube.Core.Extensions;
 using StockKube.Core.ExternalSources;
+using StockKube.Core.Helpers;
+using StockKube.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +34,16 @@ namespace StockKube.Core.Services
                 _logger.Log($"Getting Rate... {_provider.ExchangeType.ToString()}");
 
                 var symbols = _cacheAppSettingService.GetSetting<List<Watchlist>>(string.Format(CoreConstants.KEY_FORMAT_ITEMS, CoreConstants.WATCHLIST, _provider.ExchangeType.ToString()));
+
+                List<RateDTO> retrievedRates = new List<RateDTO>();
+                foreach(var symbol in symbols.Select(x => new SymbolDTO
+                {
+                    ExchangeType = x.ExchangeType.ToEnum<ExchangeTypeEnum>(),
+                    Symbol = x.Symbol
+                }).ToList())
+                {
+                    retrievedRates.Add(_provider.GetRateAsync(symbol).GetAwaiter().GetResult());
+                }
                 
             }
             catch (Exception ex)
