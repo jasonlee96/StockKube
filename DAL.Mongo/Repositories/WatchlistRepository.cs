@@ -14,7 +14,7 @@ namespace DAL.Mongo.Repositories
 
         public Task<List<Watchlist>> GetAllWatchlistAsync()
         {
-            return Task.FromResult(FormQueryable().ToList());
+            return Task.FromResult(_query.ToList());
         }
     }
 }

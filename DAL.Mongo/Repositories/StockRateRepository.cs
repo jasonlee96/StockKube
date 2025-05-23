@@ -15,7 +15,7 @@ namespace DAL.Mongo.Repositories
 
         public List<StockRate> GetRateBySymbol(string symbol)
         {
-            return FormQueryable().Where(x => x.Symbol.ToUpper() == symbol.ToUpper()).ToList();
+            return _query.Where(x => x.Symbol.ToUpper() == symbol.ToUpper()).ToList();
         }
     }
 }

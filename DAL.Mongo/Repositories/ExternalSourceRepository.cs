@@ -20,7 +20,7 @@ namespace DAL.Mongo.Repositories
 
         public async Task<List<ExternalSource>> GetAllExternalSourcesAsync()
         {
-            return await Task.FromResult(FormQueryable().ToList());
+            return await Task.FromResult(_query.ToList());
         }
     }
 }
